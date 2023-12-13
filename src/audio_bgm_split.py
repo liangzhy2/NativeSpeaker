@@ -19,9 +19,14 @@ from basicsr.utils.download_util import load_file_from_url
 class AudioProcess:
     def __init__(self, agg, is_half=False, tta=False):
 
-        # model_path = os.path.join('weights', 'HP5-主旋律人声vocals+其他instrumentals.pth')
-        model_path = load_file_from_url(url="https://hf-mirror.com/lj1995/VoiceConversionWebUI/resolve/main/uvr5_weights/HP5-%E4%B8%BB%E6%97%8B%E5%BE%8B%E4%BA%BA%E5%A3%B0vocals%2B%E5%85%B6%E4%BB%96instrumentals.pth?download=true", 
+        ## verify whether local model file exists to save download model file time
+        model_target_path = os.path.join('weights', 'HP5-主旋律人声vocals+其他instrumentals.pth')
+        if os.path.exists(model_target_path):
+            model_path = model_target_path
+        else:
+            model_path = load_file_from_url(url="https://hf-mirror.com/lj1995/VoiceConversionWebUI/resolve/main/uvr5_weights/HP5-%E4%B8%BB%E6%97%8B%E5%BE%8B%E4%BA%BA%E5%A3%B0vocals%2B%E5%85%B6%E4%BB%96instrumentals.pth?download=true", 
                                         model_dir='weights', progress=True, file_name="HP5-主旋律人声vocals+其他instrumentals.pth")
+        
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.data = {
             # Processing Options
